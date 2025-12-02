@@ -1,0 +1,517 @@
+/* ===== Global Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== Colors ===== */
+:root {
+  --deep-red: #662222;
+  --mid-red:  #842A3B;
+  --rose:     #A3485A;
+  --cream:    #F5DAA7;
+  --bg-dark:  #181214;
+  --text-main:  #fdfdfd;
+  --text-muted: #f0e4e4;
+}
+
+/* ===== Base ===== */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top left, var(--rose), var(--deep-red));
+  color: var(--text-main);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.container {
+  width: min(1400px, 94%);
+  margin: 0 auto;
+  padding: 3rem 0 4rem;
+}
+
+/* ===== Header ===== */
+.site-header {
+  background: linear-gradient(90deg, var(--deep-red), var(--mid-red));
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.site-title {
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  color: var(--cream);
+}
+
+.main-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.main-nav a {
+  text-decoration: none;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.main-nav a.active,
+.main-nav a:hover {
+  color: var(--cream);
+}
+
+.main-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.35rem;
+  width: 0;
+  height: 2px;
+  background: var(--cream);
+  transition: width 0.2s ease;
+}
+
+.main-nav a:hover::after,
+.main-nav a.active::after {
+  width: 100%;
+}
+
+/* =========================================================
+   HOME / HERO
+   ========================================================= */
+
+.hero {
+  padding: 3.5rem 0 4.25rem;
+}
+
+.hero-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.25rem;
+}
+
+/* Photo rows */
+.hero-photos-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.1rem;
+  max-width: 1100px;
+}
+
+.hero-photos-row--top {
+  margin-bottom: 0.5rem;
+}
+
+.hero-photos-row--bottom {
+  margin-top: 0.5rem;
+}
+
+/* Individual photo card */
+.hero-photo-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.9rem;
+  width: clamp(140px, 11vw, 200px);
+  aspect-ratio: 4 / 3;
+  background: #000;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  cursor: default;
+}
+
+.hero-photo-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+/* Hover overlay */
+.hero-photo-caption {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0.6rem 0.75rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.caption-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.caption-credit {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 0.1rem;
+}
+
+.hero-photo-card:hover img {
+  transform: scale(1.07);
+  opacity: 0.9;
+}
+
+.hero-photo-card:hover .hero-photo-caption {
+  opacity: 1;
+}
+
+/* Hero copy */
+.hero-content {
+  text-align: center;
+  max-width: 640px;
+}
+
+.hero-title {
+  font-size: clamp(2.6rem, 4vw, 3.3rem);
+  font-weight: 700;
+}
+
+.hero-subtitle {
+  margin-top: 0.75rem;
+  color: var(--text-muted);
+}
+
+.hero-tagline {
+  margin-top: 1.4rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cream);
+}
+
+/* Straight rows on big screens */
+@media (min-width: 1100px) {
+  .hero-photos-row {
+    flex-wrap: nowrap;
+  }
+
+  .hero-photo-card {
+    flex: 0 1 18%;
+  }
+}
+
+/* =========================================================
+   ABOUT PAGE
+   ========================================================= */
+
+.about-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
+  gap: 3rem;
+  align-items: center;
+}
+
+.about-photo-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.about-photo {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 1.2rem;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(245, 218, 167, 0.5);
+}
+
+.about-photo img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.section-label {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.8rem;
+  color: var(--cream);
+  margin-bottom: 0.4rem;
+}
+
+.section-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.section-body {
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   EXPERIENCE PAGE
+   ========================================================= */
+
+.experience-wrapper {
+  margin-top: 2rem;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 1.1rem;
+  padding: 1.75rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.experience-track {
+  display: flex;
+  transition: transform 0.35s ease;
+}
+
+.experience-card {
+  min-width: 100%;
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: center;
+}
+
+.experience-logo {
+  width: 100%;
+  max-width: 180px;
+  aspect-ratio: 1 / 1;
+  background: #000;
+  border-radius: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.experience-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.experience-org {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.experience-role {
+  font-size: 0.95rem;
+  color: var(--cream);
+  margin-top: 0.15rem;
+}
+
+.experience-description {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+/* Slider controls */
+.slider-controls {
+  position: absolute;
+  inset-block: 50%;
+  transform: translateY(-50%);
+  inset-inline: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.slider-button {
+  pointer-events: auto;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--cream);
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  backdrop-filter: blur(4px);
+}
+
+/* =========================================================
+   RESUME PAGE
+   ========================================================= */
+
+.resume-section {
+  margin-top: 1.5rem;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 1.1rem;
+  padding: 1.75rem 1.5rem;
+}
+
+.resume-header-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.resume-name {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.resume-contact {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.resume-contact a {
+  color: var(--cream);
+  text-decoration: none;
+}
+
+/* Section headers */
+.resume-block-title {
+  margin-top: 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.resume-item {
+  margin-top: 0.75rem;
+}
+
+.resume-item-title {
+  font-weight: 600;
+}
+
+.resume-item-meta {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.resume-item-bullets {
+  margin-top: 0.4rem;
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
+}
+
+/* Resume download button */
+.button-row {
+  margin-top: 1rem;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--cream), var(--rose));
+  color: #2b1618;
+  border: none;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.site-footer {
+  margin-top: auto;
+  border-top: 1px solid rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.site-footer .container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 1.5rem 0;
+}
+
+.footer-left {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.footer-right a {
+  color: var(--cream);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.footer-right a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .site-header .container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .main-nav ul {
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-inner {
+    gap: 2rem;
+  }
+
+  .hero-content {
+    text-align: left;
+    align-self: stretch;
+  }
+
+  .hero-photos-row {
+    justify-content: flex-start;
+  }
+
+  /* About stacks vertically */
+  .about-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* Experience card becomes vertical */
+  .experience-card {
+    grid-template-columns: 1fr;
+  }
+
+  .experience-logo {
+    margin: 0 auto;
+  }
+}
