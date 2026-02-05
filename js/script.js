@@ -13,43 +13,124 @@ document.addEventListener("DOMContentLoaded", () => {
      2. Experience slider
      =============================== */
   const track = document.getElementById("experience-track");
-  if (!track) return; // not on Experience page, nothing else to do
+  if (track) {
+    const slides = Array.from(track.querySelectorAll(".experience-card"));
+    if (slides.length > 0) {
+      const buttons = document.querySelectorAll(".slider-button");
+      let currentIndex = 0;
 
-  const slides = Array.from(track.children);
-  if (slides.length === 0) return;
+      function showSlide(index) {
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
+        currentIndex = index;
+        slides.forEach((slide, i) => {
+          slide.classList.toggle("active", i === currentIndex);
+        });
+      }
 
-  const buttons = document.querySelectorAll(".slider-button");
-  let currentIndex = 0;
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const dir = btn.dataset.dir;
+          showSlide(currentIndex + (dir === "next" ? 1 : -1));
+        });
+      });
 
-  // Ensure we have a smooth animation
-  track.style.transition = "transform 0.35s ease";
-
-  function goToSlide(index) {
-    const clampedIndex = (index + slides.length) % slides.length;
-    currentIndex = clampedIndex;
-
-    const targetSlide = slides[clampedIndex];
-    const offset = targetSlide.offsetLeft;
-
-    track.style.transform = `translateX(-${offset}px)`;
+      showSlide(0);
+    }
   }
 
-  buttons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const dir = btn.dataset.dir;
-      if (dir === "next") {
-        goToSlide(currentIndex + 1);
-      } else {
-        goToSlide(currentIndex - 1);
+  /* ===============================
+     3. Lightbox for hero photos
+     =============================== */
+  const heroPhotos = document.querySelectorAll(".hero-photo-card");
+  
+  if (heroPhotos.length > 0) {
+    const lightbox = document.createElement("div");
+    lightbox.className = "lightbox";
+    lightbox.innerHTML = `
+      <button class="lightbox-close" aria-label="Close lightbox">&times;</button>
+      <img class="lightbox-img" src="" alt="" />
+      <div class="lightbox-caption">
+        <p class="caption-title"></p>
+        <p class="caption-credit"></p>
+      </div>
+    `;
+    document.body.appendChild(lightbox);
+
+    const lbImg = lightbox.querySelector(".lightbox-img");
+    const lbTitle = lightbox.querySelector(".caption-title");
+    const lbCredit = lightbox.querySelector(".caption-credit");
+    const lbClose = lightbox.querySelector(".lightbox-close");
+
+    heroPhotos.forEach((card) => {
+      card.addEventListener("click", () => {
+        const img = card.querySelector("img");
+        const title = card.querySelector(".caption-title");
+        const credit = card.querySelector(".caption-credit");
+
+        lbImg.src = img.src;
+        lbImg.alt = img.alt;
+        lbTitle.textContent = title ? title.textContent : "";
+        lbCredit.textContent = credit ? credit.textContent : "";
+
+        lightbox.classList.add("active");
+        document.body.style.overflow = "hidden";
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+
+    lbClose.addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && lightbox.classList.contains("active")) {
+        closeLightbox();
       }
+    });
+  }
+
+  /* ===============================
+     4. Magnetic buttons
+     =============================== */
+  const magneticElements = document.querySelectorAll(".btn-primary, .slider-button");
+  
+  magneticElements.forEach((el) => {
+    el.addEventListener("mousemove", (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      
+      el.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+    });
+
+    el.addEventListener("mouseleave", () => {
+      el.style.transform = "";
     });
   });
 
-  // Keep alignment correct on resize
-  window.addEventListener("resize", () => {
-    goToSlide(currentIndex);
+  /* ===============================
+     5. Page transitions
+     =============================== */
+  const internalLinks = document.querySelectorAll('a[href$=".html"]');
+  
+  internalLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const href = link.getAttribute("href");
+      
+      // Only handle internal navigation
+      if (href && !href.startsWith("http") && !href.startsWith("mailto")) {
+        e.preventDefault();
+        document.body.classList.add("fade-out");
+        
+        setTimeout(() => {
+          window.location.href = href;
+        }, 300);
+      }
+    });
   });
-
-  // Start at first slide
-  goToSlide(0);
 });
