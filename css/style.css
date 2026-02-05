@@ -7,9 +7,9 @@
 
 /* ===== Colors ===== */
 :root {
-  --deep-red: #662222;
-  --mid-red:  #842A3B;
-  --rose:     #A3485A;
+  --deep-red: #4a1818;
+  --mid-red:  #6b2131;
+  --rose:     #8a3648;
   --cream:    #F5DAA7;
   --bg-dark:  #181214;
   --text-main:  #fdfdfd;
@@ -17,8 +17,7 @@
 }
 
 /* ===== Base ===== */
-html,
-body {
+html, body {
   height: 100%;
 }
 
@@ -34,6 +33,12 @@ body {
 
 main {
   flex: 1;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+body.fade-out main {
+  opacity: 0;
 }
 
 .container {
@@ -102,16 +107,19 @@ main {
 /* =========================================================
    HOME / HERO
    ========================================================= */
-
 .hero {
-  padding: 3.5rem 0 4.25rem;
+  padding: 2rem 0;
+  min-height: calc(100vh - 140px);
+  display: flex;
+  align-items: center;
 }
 
 .hero-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.25rem;
+  gap: 2.5rem;
+  width: 100%;
 }
 
 /* Photo rows */
@@ -119,28 +127,41 @@ main {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1.1rem;
-  max-width: 1100px;
+  gap: 1.2rem;
+  max-width: 1210px;
 }
 
 .hero-photos-row--top {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.55rem;
 }
 
 .hero-photos-row--bottom {
-  margin-top: 0.5rem;
+  margin-top: 0.55rem;
 }
 
 /* Individual photo card */
 .hero-photo-card {
   position: relative;
   overflow: hidden;
-  border-radius: 0.9rem;
-  width: clamp(140px, 11vw, 200px);
+  border-radius: 1rem;
+  width: clamp(154px, 12vw, 220px);
   aspect-ratio: 4 / 3;
   background: #000;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
-  cursor: default;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Stagger the floating animation for each card */
+.hero-photo-card:nth-child(1) { animation-delay: 0s; }
+.hero-photo-card:nth-child(2) { animation-delay: 0.5s; }
+.hero-photo-card:nth-child(3) { animation-delay: 1s; }
+.hero-photo-card:nth-child(4) { animation-delay: 1.5s; }
+.hero-photo-card:nth-child(5) { animation-delay: 2s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
 }
 
 .hero-photo-card img {
@@ -181,6 +202,10 @@ main {
   opacity: 0.9;
 }
 
+.hero-photo-card:hover {
+  animation-play-state: paused;
+}
+
 .hero-photo-card:hover .hero-photo-caption {
   opacity: 1;
 }
@@ -188,22 +213,36 @@ main {
 /* Hero copy */
 .hero-content {
   text-align: center;
-  max-width: 640px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-name {
+  font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin-bottom: 0.85rem;
 }
 
 .hero-title {
-  font-size: clamp(2.6rem, 4vw, 3.3rem);
+  font-size: clamp(3.1rem, 6vw, 4.8rem);
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .hero-subtitle {
-  margin-top: 0.75rem;
+  margin-top: 1.1rem;
+  font-size: 1.25rem;
   color: var(--text-muted);
 }
 
 .hero-tagline {
-  margin-top: 1.4rem;
-  font-size: 0.95rem;
+  margin-top: 1.75rem;
+  font-size: 1.1rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--cream);
@@ -214,7 +253,6 @@ main {
   .hero-photos-row {
     flex-wrap: nowrap;
   }
-
   .hero-photo-card {
     flex: 0 1 18%;
   }
@@ -223,7 +261,6 @@ main {
 /* =========================================================
    ABOUT PAGE
    ========================================================= */
-
 .about-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
@@ -272,27 +309,34 @@ main {
 /* =========================================================
    EXPERIENCE PAGE
    ========================================================= */
-
 .experience-wrapper {
   margin-top: 2rem;
   background: rgba(0, 0, 0, 0.35);
   border-radius: 1.1rem;
   padding: 1.75rem 1.5rem;
   position: relative;
-  overflow: hidden;
 }
 
 .experience-track {
-  display: flex;
-  transition: transform 0.35s ease;
+  display: block;
+  position: relative;
 }
 
 .experience-card {
-  min-width: 100%;
-  display: grid;
+  display: none;
   grid-template-columns: 180px minmax(0, 1fr);
   gap: 1.75rem;
   align-items: center;
+}
+
+.experience-card.active {
+  display: grid;
+  animation: fadeIn 0.35s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .experience-logo {
@@ -332,35 +376,41 @@ main {
 
 /* Slider controls */
 .slider-controls {
-  position: absolute;
-  inset-block: 50%;
-  transform: translateY(-50%);
-  inset-inline: 0.75rem;
   display: flex;
-  justify-content: space-between;
-  pointer-events: none;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
 .slider-button {
-  pointer-events: auto;
   border: none;
   background: rgba(0, 0, 0, 0.55);
   color: var(--cream);
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 999px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   backdrop-filter: blur(4px);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.slider-button:hover {
+  background: rgba(0, 0, 0, 0.75);
+  transform: scale(1.1);
+}
+
+.slider-button:active {
+  transform: scale(0.95);
 }
 
 /* =========================================================
    RESUME PAGE
    ========================================================= */
-
 .resume-section {
   margin-top: 1.5rem;
   background: rgba(0, 0, 0, 0.35);
@@ -389,6 +439,10 @@ main {
 .resume-contact a {
   color: var(--cream);
   text-decoration: none;
+}
+
+.resume-contact a:hover {
+  text-decoration: underline;
 }
 
 /* Section headers */
@@ -438,12 +492,91 @@ main {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* =========================================================
+   LIGHTBOX
+   ========================================================= */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.lightbox.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-img {
+  max-width: 90vw;
+  max-height: 75vh;
+  border-radius: 0.5rem;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+}
+
+.lightbox.active .lightbox-img {
+  transform: scale(1);
+}
+
+.lightbox-caption {
+  margin-top: 1.25rem;
+  text-align: center;
+  color: var(--text-main);
+}
+
+.lightbox-caption .caption-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.lightbox-caption .caption-credit {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--text-main);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 /* =========================================================
    FOOTER
    ========================================================= */
-
 .site-footer {
   margin-top: auto;
   border-top: 1px solid rgba(0, 0, 0, 0.35);
@@ -454,6 +587,7 @@ main {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 0.5rem;
   padding: 1.5rem 0;
 }
 
@@ -473,9 +607,8 @@ main {
 }
 
 /* =========================================================
-   RESPONSIVE
+   RESPONSIVE - TABLET (max-width: 900px)
    ========================================================= */
-
 @media (max-width: 900px) {
   .site-header .container {
     flex-direction: column;
@@ -509,9 +642,179 @@ main {
   /* Experience card becomes vertical */
   .experience-card {
     grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .experience-card.active {
+    display: grid;
   }
 
   .experience-logo {
     margin: 0 auto;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE - MOBILE (max-width: 600px)
+   ========================================================= */
+@media (max-width: 600px) {
+  .container {
+    width: 90%;
+    padding: 2rem 0 3rem;
+  }
+
+  /* Header */
+  .site-header .container {
+    align-items: center;
+    text-align: center;
+  }
+
+  .main-nav ul {
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .main-nav a {
+    font-size: 0.85rem;
+  }
+
+  /* Hero */
+  .hero {
+    padding: 2rem 0 3rem;
+  }
+
+  .hero-inner {
+    gap: 1.5rem;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .hero-tagline {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+  }
+
+  .hero-content {
+    text-align: center;
+  }
+
+  /* Photo cards - show 2 per row on mobile */
+  .hero-photos-row {
+    gap: 0.6rem;
+    justify-content: center;
+  }
+
+  .hero-photo-card {
+    width: calc(50% - 0.4rem);
+    max-width: 160px;
+  }
+
+  /* Show captions on mobile (no hover) */
+  .hero-photo-caption {
+    opacity: 1;
+    padding: 0.4rem 0.5rem;
+  }
+
+  .caption-title {
+    font-size: 0.65rem;
+  }
+
+  .caption-credit {
+    font-size: 0.55rem;
+  }
+
+  /* About */
+  .about-photo {
+    max-width: 280px;
+  }
+
+  .section-title {
+    font-size: 1.6rem;
+  }
+
+  .section-body {
+    font-size: 0.95rem;
+  }
+
+  /* Experience */
+  .experience-wrapper {
+    padding: 1.25rem 1rem;
+  }
+
+  .experience-logo {
+    max-width: 120px;
+  }
+
+  .experience-org {
+    font-size: 1rem;
+  }
+
+  .experience-description {
+    font-size: 0.9rem;
+  }
+
+  .slider-button {
+    width: 44px;
+    height: 44px;
+    font-size: 1.3rem;
+  }
+
+  /* Resume */
+  .resume-section {
+    padding: 1.25rem 1rem;
+  }
+
+  .resume-name {
+    font-size: 1.3rem;
+  }
+
+  .resume-contact {
+    font-size: 0.8rem;
+  }
+
+  .resume-header-line {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .resume-item-bullets {
+    padding-left: 1rem;
+    font-size: 0.85rem;
+  }
+
+  /* Footer */
+  .site-footer .container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    padding: 1.25rem 0;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE - SMALL MOBILE (max-width: 400px)
+   ========================================================= */
+@media (max-width: 400px) {
+  .hero-title {
+    font-size: 1.7rem;
+  }
+
+  .hero-photo-card {
+    width: calc(50% - 0.3rem);
+  }
+
+  .main-nav ul {
+    gap: 0.5rem;
+  }
+
+  .main-nav a {
+    font-size: 0.75rem;
   }
 }
